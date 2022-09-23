@@ -1,0 +1,6 @@
+pancake-bot
+*.core
+*.json
+*.log
+core*
+*.core
