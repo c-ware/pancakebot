@@ -4,3 +4,6 @@ pancake-bot
 *.log
 core*
 *.core
+src/*.o
+src/libc99/*.o
+src/*.o

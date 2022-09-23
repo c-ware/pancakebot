@@ -1,6 +1,4 @@
-OBJS=./src/main.o ./src/libc99/stdlib.o ./src/libc99/stdio.o 
-TESTOBJS=./src/libc99/stdlib.o ./src/libc99/stdio.o 
-TESTS=
+OBJS=./src/main.o ./src/libc99/stdlib.o ./src/libc99/stdio.o ./src/handlers.o
 CC=cc
 PREFIX=/usr/local
 LDLIBS_STATIC=-L/usr/local/lib -L/opt/freeware/lib -lcurl -ldiscord -lcrypto -lpthread -lnghttp2 -lssl -lz -lpsl -lidn2 -lunistring -liconv -static
@@ -27,6 +25,9 @@ uninstall:
 
 ./src/main.o: ./src/main.c ./src/bot.h
 	$(CC) -c $(CFLAGS) ./src/main.c -o ./src/main.o
+
+./src/handlers.o: ./src/handlers.c ./src/bot.h
+	$(CC) -c $(CFLAGS) ./src/handlers.c -o ./src/handlers.o
 
 ./src/libc99/stdlib.o: ./src/libc99/stdlib.c ./src/libc99/libc99.h
 	$(CC) -c $(CFLAGS) ./src/libc99/stdlib.c -o ./src/libc99/stdlib.o 
