@@ -8,8 +8,6 @@
 
 #include "bot.h"
 
-extern FILE *log_file;
-
 /* This will get called when someone says PANCAKES or HOTCAKES */
 void pancakes_handler(struct discord *client, const struct discord_message *event) {
     struct discord_ret ret;
@@ -122,8 +120,7 @@ void new_message(struct discord *client, const struct discord_message *event) {
     int index = 0;
     struct PancakeBot *pancake_bot = discord_get_data(client);
 
-    log_info("[MSG] %s#%s on %llu/%llu: %s\n", event->author->username, event->author->discriminator, event->guild_id, event->channel_id, event->content);
-    fprintf(log_file, "--> %s#%s on %llu/%llu: %s\n", event->author->username, event->author->discriminator, event->guild_id, event->channel_id, event->content);
+    log_info("[MSG] %s#%s on %llu/%llu, %llu: \"%s\"\n", event->author->username, event->author->discriminator, event->guild_id, event->channel_id, event->id, event->content);
 
     /* Do not trigger our own messages. */
     if(event->author->bot == 1)
@@ -171,4 +168,25 @@ void new_message(struct discord *client, const struct discord_message *event) {
         return; 
     }
 
+}
+
+
+void edit_message(struct discord *client, const struct discord_message *event) {
+    log_info("[MSG EDIT] %s#%s on %llu/%llu (%llu): %s\n", event->author->username, event->author->discriminator, event->guild_id, event->channel_id, event->id, event->content);
+}
+
+
+void del_message(struct discord *client, const struct discord_message_delete *event) {
+    log_info("[MSG DEL] on %llu/%llu: %llu\n", event->guild_id, event->channel_id, event->id);
+}
+
+
+void del_message_bulk(struct discord *client, const struct discord_message_delete_bulk *event) {
+    int message;
+
+    log_info("[MSG DEL BULK START] on %llu/%llu:\n", event->guild_id, event->channel_id);
+    for(message = 0; message < event->ids->size; message++) {
+            log_info("%d: %llu\n", message, event->ids->array[message]);
+    }
+    log_info("[MSG DEL BULK END]\n");
 }

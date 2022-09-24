@@ -8,8 +8,6 @@
 
 #include "bot.h"
 
-FILE *log_file;
-
 struct discord_emoji *load_emoji(struct discord *client, u64snowflake guild_id, u64snowflake emoji_id) {
     struct discord_ret_emoji emoji_settings;
     struct discord_emoji *emoji_buffer = malloc(sizeof(struct discord_emoji));
@@ -30,14 +28,23 @@ int main(void) {
     /* Initialize the pancake bot and Discord */
     srand(time(NULL));
     INIT_VARIABLE(pancake_bot);
-    log_file = fopen(LOG_FILE, "a");
-    fprintf(log_file, "PancakeBot restart successful\n");
-    discord_set_data(client, &pancake_bot);
+   
+    /* Initiate the log file */ 
+    FILE *fout = fopen(LOG_FILE, "a");
+    log_set_quiet(true);
+    log_add_fp(fout, LOG_TRACE);
 
+    /* Prime the bot */
+    discord_set_data(client, &pancake_bot);
     pancake_bot.pancakes_emoji = load_emoji(client, 928763123362578552, 928817847487066144);
 
     discord_add_intents(client, DISCORD_GATEWAY_MESSAGE_CONTENT);
     discord_set_on_message_create(client, new_message);
+    discord_set_on_message_update(client, edit_message);
+    discord_set_on_message_delete(client, del_message);
+    discord_set_on_message_delete_bulk(client, del_message_bulk);
+
+    /* Enter the main loop */
     discord_run(client);
 
     discord_cleanup(client);

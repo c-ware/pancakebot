@@ -80,6 +80,9 @@ void unix_handler(struct discord *client, const struct discord_message *event);
 void meow_handler(struct discord *client, const struct discord_message *event);
 void unix_handler_abs(struct discord *client, const struct discord_message *event);
 void pancakes_handler(struct discord *client, const struct discord_message *event);
+void edit_message(struct discord *client, const struct discord_message *event);
+void del_message(struct discord *client, const struct discord_message_delete *event);
+void del_message_bulk(struct discord *client, const struct discord_message_delete_bulk *event);
 
 /* Finally, utility functions: */
 struct discord_emoji *load_emoji(struct discord *client, u64snowflake guild_id,
