@@ -9,6 +9,7 @@ struct discord_emoji;
 /* Tuning parameters */
 #define MESSAGE_THRESHOLD           15
 #define UNIX_QUOTE_LENGTH_WITH_PS   1024 + 1
+#define LOG_FILE                    "/root/PBlogfile.txt"
 
 #define INIT_VARIABLE(var) \
     memset(&(var), 0, sizeof((var)))

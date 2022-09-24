@@ -8,6 +8,8 @@
 
 #include "bot.h"
 
+extern FILE *log_file;
+
 /* This will get called when someone says PANCAKES or HOTCAKES */
 void pancakes_handler(struct discord *client, const struct discord_message *event) {
     struct discord_ret ret;
@@ -119,6 +121,9 @@ void unix_handler(struct discord *client, const struct discord_message *event) {
 void new_message(struct discord *client, const struct discord_message *event) {
     int index = 0;
     struct PancakeBot *pancake_bot = discord_get_data(client);
+
+    log_info("[MSG] %s#%s on %llu/%llu: %s\n", event->author->username, event->author->discriminator, event->guild_id, event->channel_id, event->content);
+    fprintf(log_file, "--> %s#%s on %llu/%llu: %s\n", event->author->username, event->author->discriminator, event->guild_id, event->channel_id, event->content);
 
     /* Do not trigger our own messages. */
     if(event->author->bot == 1)
