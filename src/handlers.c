@@ -19,7 +19,7 @@ void pancakes_handler(struct discord *client, const struct discord_message *even
 }
 
 
-void unix_handler_abs(struct discord *client, const struct discord_message *event) {
+void quote_handler_abs(struct discord *client, const struct discord_message *event) {
     int written = 0;
     const char *quote = NULL;
     char message[UNIX_QUOTE_LENGTH_WITH_PS + 1];
@@ -49,35 +49,7 @@ void unix_handler_abs(struct discord *client, const struct discord_message *even
     discord_create_message(client, event->channel_id, &params, &ret);
 }
 
-void meow_handler(struct discord *client, const struct discord_message *event) {
-    int written = 0;
-    struct discord_ret_message ret;
-    struct discord_create_message params;
-    struct PancakeBot *pancake_bot = discord_get_data(client);
-
-    /* No bot fun */
-    if(event->author->bot == 1)
-        return;
-
-    /* Only send a UHH quote every N messages */
-    if(pancake_bot->message_cooldown != 0) {
-        pancake_bot->message_cooldown = ((pancake_bot->message_cooldown + 1) % MESSAGE_THRESHOLD);
-        
-        return;
-    }
-
-    INIT_VARIABLE(ret);
-    INIT_VARIABLE(params);
-
-    params.content = "I'm not a cat!";
-    params.message_reference = event->message_reference;
-
-    pancake_bot->message_cooldown++;
-    discord_create_message(client, event->channel_id, &params, &ret);
-}
-
-
-void unix_handler(struct discord *client, const struct discord_message *event) {
+void idle_handler(struct discord *client, const struct discord_message *event) {
     int written = 0;
     const char *quote = NULL;
     char message[UNIX_QUOTE_LENGTH_WITH_PS + 1];
@@ -92,7 +64,73 @@ void unix_handler(struct discord *client, const struct discord_message *event) {
     /* Only send a UHH quote every N messages */
     if(pancake_bot->message_cooldown != 0) {
         pancake_bot->message_cooldown = ((pancake_bot->message_cooldown + 1) % MESSAGE_THRESHOLD);
-        
+        return;
+    }
+
+    INIT_VARIABLE(ret);
+    INIT_VARIABLE(params);
+
+    params.content = message;
+    params.message_reference = event->message_reference;
+    quote = idle_quotes[rand() % (sizeof(idle_quotes) / sizeof(char *))];
+    written = libc99_snprintf(message, UNIX_QUOTE_LENGTH_WITH_PS, "%s\n", quote);
+
+    /* Make sure the written quote did not overflow */
+    if(written >= UNIX_QUOTE_LENGTH_WITH_PS) {
+        fprintf(stderr, "pancake-bot: quote '%s' caused overflow in buffer\n", quote);
+        abort();
+    }
+
+    pancake_bot->message_cooldown++;
+    discord_create_message(client, event->channel_id, &params, &ret);
+}
+
+void idle_handler_abs(struct discord *client, const struct discord_message *event) {
+    int written = 0;
+    const char *quote = NULL;
+    char message[UNIX_QUOTE_LENGTH_WITH_PS + 1];
+    struct discord_ret_message ret;
+    struct discord_create_message params;
+    struct PancakeBot *pancake_bot = discord_get_data(client);
+
+    /* No bot fun */
+    if(event->author->bot == 1)
+        return;
+
+    INIT_VARIABLE(ret);
+    INIT_VARIABLE(params);
+
+    params.content = message;
+    params.message_reference = event->message_reference;
+    quote = idle_quotes[rand() % (sizeof(idle_quotes) / sizeof(char *))];
+    written = libc99_snprintf(message, UNIX_QUOTE_LENGTH_WITH_PS, "%s\n", quote);
+
+    /* Make sure the written quote did not overflow */
+    if(written >= UNIX_QUOTE_LENGTH_WITH_PS) {
+        fprintf(stderr, "pancake-bot: quote '%s' caused overflow in buffer\n", quote);
+        abort();
+    }
+
+    pancake_bot->message_cooldown++;
+    discord_create_message(client, event->channel_id, &params, &ret);
+}
+
+
+void quote_handler(struct discord *client, const struct discord_message *event) {
+    int written = 0;
+    const char *quote = NULL;
+    char message[UNIX_QUOTE_LENGTH_WITH_PS + 1];
+    struct discord_ret_message ret;
+    struct discord_create_message params;
+    struct PancakeBot *pancake_bot = discord_get_data(client);
+
+    /* No bot fun */
+    if(event->author->bot == 1)
+        return;
+
+    /* Only send a UHH quote every N messages */
+    if(pancake_bot->message_cooldown != 0) {
+        pancake_bot->message_cooldown = ((pancake_bot->message_cooldown + 1) % MESSAGE_THRESHOLD);
         return;
     }
 
@@ -136,7 +174,7 @@ void new_message(struct discord *client, const struct discord_message *event) {
     
     /* Meow? */
     if(strstr(event->content, "MEOW") != NULL) {
-        meow_handler(client, event);
+        idle_handler(client, event);
 
         return;
     }
@@ -157,14 +195,21 @@ void new_message(struct discord *client, const struct discord_message *event) {
 
     /* UNIX? */
     if(strstr(event->content, "UNIX") != NULL) {
-        unix_handler(client, event);
+        quote_handler(client, event);
 
         return;
     }
 
     /* Asking for a witty quote? */
     if(strstr(event->content, "&QUOTE") != NULL) {
-        unix_handler_abs(client, event);
+        quote_handler_abs(client, event);
+        return; 
+    }
+
+
+    /* Asking for a witty quote of a different source? */
+    if(strstr(event->content, "&IDLE") != NULL) {
+        idle_handler_abs(client, event);
         return; 
     }
 

@@ -25,7 +25,6 @@ static const char *unix_quotes[] = {
     "Two of the most famous products of Berkeley are LSD and Unix. I don't think that is a coincidence.",
     "UNIX: The World's First Computer Virus",
     "Don't Talk to Me, I'm Not a Typewriter!",
-    "Not having sendmail is like not having VD.",
     "Terminal Insanity.. Curses! Foiled Again!",
     "X: The First Fully Modular Software Disaster",
     "Csh, pipes, and find: Power Tools for Power Fools",
@@ -39,7 +38,6 @@ static const char *unix_quotes[] = {
     "$ mkdir matter; cat >matter\nmatter: cannot create",
     "man was great for its time. But that time has long passed.",
     "No Manual Entry for Well Thought-Out",
-    "sra@mintaka> man 8 local\nBut what do you want from section local?",
     "Why does the user guide bear no relationship to reality?",
     "For Programmers, Not Users",
     "The Source Code Is the Documentation",
@@ -70,15 +68,26 @@ static const char *unix_quotes[] = {
     "Using these toolkits is like trying to make a bookshelf out of mashed potatoes.",
     "At the mere mention of network window systems, certain propeller heads who confuse technology with economics will start foaming at the mouth about their client/server models and how in the future palmtops will just run the X server and let the other half of the program run on some Cray down the street.",
     "Anybody who has ever used X knows that Chapman's error was trying to use xauth in the first place. He should have known better.",
-    "Myth: X Is 'Portable' -- And Iran-Contra wasn't Arms for Hostages",
-    "X: the display from hell",
+    "X: the display from hell"
+};
+
+static const char* idle_quotes[] = {
+    "I'm not a cat!",
+    "*confused cat noises*",
+    "I am not tamed.",
+    "Squares are bad news, man.",
+    "*glitches out*",
+    "Ouch, m-my eyes.",
+    "[It was not worth the effort]",
+    "[You tried]"
 };
 
 /* The rest of the functions. First, handlers: */
 void new_message(struct discord *client, const struct discord_message *event);
-void unix_handler(struct discord *client, const struct discord_message *event);
-void meow_handler(struct discord *client, const struct discord_message *event);
-void unix_handler_abs(struct discord *client, const struct discord_message *event);
+void quote_handler(struct discord *client, const struct discord_message *event);
+void idle_handler(struct discord *client, const struct discord_message *event);
+void idle_handler_abs(struct discord *client, const struct discord_message *event);
+void quote_handler_abs(struct discord *client, const struct discord_message *event);
 void pancakes_handler(struct discord *client, const struct discord_message *event);
 void edit_message(struct discord *client, const struct discord_message *event);
 void del_message(struct discord *client, const struct discord_message_delete *event);
