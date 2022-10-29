@@ -82,9 +82,12 @@ static const char* idle_quotes[] = {
     "[You tried]"
 };
 
+static const char* help_text = "PancakeBot\n\nThis bot will randomly dump out quotes from either the UNIX Haters Handbook or a variety of video games, prompted by certain keywords. This bot features some old-style commands:\n&quote - display a UNIX Haters quote\n&idle - display an \"idle quote\" (in this case, from OneShot)\n&help - display this help text\n";
+
 /* The rest of the functions. First, handlers: */
 void new_message(struct discord *client, const struct discord_message *event);
 void quote_handler(struct discord *client, const struct discord_message *event);
+void help_handler(struct discord *client, const struct discord_message *event);
 void idle_handler(struct discord *client, const struct discord_message *event);
 void idle_handler_abs(struct discord *client, const struct discord_message *event);
 void quote_handler_abs(struct discord *client, const struct discord_message *event);

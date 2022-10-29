@@ -45,7 +45,6 @@ void quote_handler_abs(struct discord *client, const struct discord_message *eve
         abort();
     }
 
-    pancake_bot->message_cooldown++;
     discord_create_message(client, event->channel_id, &params, &ret);
 }
 
@@ -111,10 +110,26 @@ void idle_handler_abs(struct discord *client, const struct discord_message *even
         abort();
     }
 
-    pancake_bot->message_cooldown++;
     discord_create_message(client, event->channel_id, &params, &ret);
 }
 
+void help_handler(struct discord *client, const struct discord_message *event) {
+    struct discord_ret_message ret;
+    struct discord_create_message params;
+    struct PancakeBot *pancake_bot = discord_get_data(client);
+
+    /* No bot fun */
+    if(event->author->bot == 1)
+        return;
+
+    INIT_VARIABLE(ret);
+    INIT_VARIABLE(params);
+
+    params.content = (char*)help_text;
+    params.message_reference = event->message_reference;
+
+    discord_create_message(client, event->channel_id, &params, &ret);
+}
 
 void quote_handler(struct discord *client, const struct discord_message *event) {
     int written = 0;
@@ -213,6 +228,10 @@ void new_message(struct discord *client, const struct discord_message *event) {
         return; 
     }
 
+    if(strstr(event->content, "&HELP") != NULL) {
+        help_handler(client, event);
+        return;
+    }
 }
 
 
