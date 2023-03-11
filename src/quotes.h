@@ -59,6 +59,37 @@ static const char* oneshot_quotes[] = {
     "[You tried]"
 };
 
+static const char* homestuck_quotes[] = {
+    "Mr. Strider, have you considered that what you actually dread is to have your urban rhythms exposed for what they truly are, which is, clinically speaking, just shy of da bomb?\n - Rose LaLonde",
+    "EGBERT YOU ARE THICKER THAN THAT HIDEOUS JOKE BOOK YOU WADDLE AROUND WITH.\n - Karkat Vantas",
+    "YOU DON.T EVEN KNOW IT YET. BUT YOU ARE ABOUT TO START PASSING OUT BUNNIES LIKE THEY'RE CHEAP CIGARS. IT'S GOING TO BE AN EMBARRASSING DISPLAY.\n - Karkat Vantas",
+    "DRAWING IS EASY. DON.T LET ANYONE EVER TELL YOU IT ISN.T. YOU WORK HARD. AND HONE YOUR CRAFT. AND IGNORE THE HATERS. UNTIL YOU ARE IN. THE ZONE.\n - Caliborn",
+    "also fred savage has a really punchable face\n - Dave Strider", 
+    "oh hell that is such a coincidence i just found an unopened container of apple juice in my closet it is like fucking christmas up in here\n - Dave Strider",
+    "Oh, I see. So instead of having to double explain, I merely have to put up with being double spied upon. What a relief!\n - Rose LaLonde",
+    "I Suddenly Dont Understand Anything\n - Kanaya Maryam",
+    "and yet as much as that guys the tooliest dude i could ever hope to meet he and i would still get along famously cause we can both see just him and me. havin a see party. like a couple of eagle eyed bros peepin shit up into the wee hours\n - Dave Strider",
+    "And you don't have to 8e a good person to 8e a hero.\n - Vriska Serket",
+    "C4N 1 L1CK TH3 P41NT1NGS?\n - Terezi Pyrope",
+    "i could give myself a hernia trying to be as big a douche as that guy\n - Dave Strider",
+    "Furthermore Which Rose Have You Chosen To Be This Time, The Stupid Rose Or The Smart Rose\n - Kanaya Maryam",
+    "it is like that scene in con air, i will give her the bunny like i am nick cage fresh out of the slammer. i wish i had a filthy wifebeater on, oh well.\n - John Egbert",
+    "PERFECT FOR WHAT, FLEXING YOUR FORMIDABLE MENTAL HANDICAP LIKE A FUCKING HEAVYWEIGHT FOR THE NEXT SEVERAL MINUTES? OH WAIT, LET ME CHECK, THE ANSWER IS YES.\n - Karkat Vantas",
+    "THE ROCK YOU'RE ON DOESN'T BLAST OFF RIGHT AWAY. TOO BAD, BECAUSE IT WOULD HAVE SPARED YOU FROM MAKING A FOOL OF YOURSELF IN A COUPLE MINUTES, AND MORE IMPORTANTLY, SPARED ME FROM HAVING TO WATCH.\n - Karkat Vantas",
+    "why did the fat kid or whoever drank it know what piss tasted like i mean his reaction was nigh instantaneous\n - Dave Strider",
+    "that's an ugly rumor. whoever told you that is a filthy liar. and you should probably stop hitting on him all the time or whatever.\n - John Egbert",
+    "im wearing a hood and have butterfly wings what else would you like to know\n - Aradia Megido",
+    "but i guess rather than acting it out we can just talk about it, the old fashioned way\n - Aradia Megido",
+    "4R3 YOU SUR3 YOU W4NT TO G3T YOUR CLOCK3D CL34N3D BY 4 BL1ND CH1CK?\n - Terezi Pyrope",
+    "oh man, let me drop everything and go there, because i'm in such a huge hurry to take more of your advice!\n - John Egbert",
+    "that's because you guys always do things the hard way. and the dumb way.\n - John Egbert",
+    "sEe MaN, i Am StRaIgHt Up TeLlInG yOu.  MiRaClEs.  iT.s LiKe, AlRiGhT, cOmPuTeRs, RiGhT?  WhAt ThE fUcK?  mIrAcLeS iS wHaT.\n - Gamzee Makara",
+    "thanks! yes im alive\n - Aradia Megido",
+};
+
+
+
+
 static const char* help_text = "PancakeBot\n\nThis bot will randomly dump out quotes from either the UNIX Haters Handbook or a variety of video games, prompted by certain keywords. This bot features some old-style commands:\n&unix - display a UNIX Haters quote\n&oneshot - display a OneShot quote\n&hs - display a Homestuck quote\n&help - display this help text\n";
 
 #endif

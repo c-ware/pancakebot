@@ -7,7 +7,7 @@
 struct discord_emoji;
 
 /* Tuning parameters */
-#define MESSAGE_THRESHOLD      3
+#define MESSAGE_THRESHOLD      50
 #define QUOTE_LENGTH_WITH_PS   1024 + 1
 #define LOG_FILE               "/root/PBlogfile.txt"
 

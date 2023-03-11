@@ -55,6 +55,10 @@ void quote_handler(struct discord *client, const struct discord_message *event,
         list_length = sizeof(oneshot_quotes); 
         from_name = "-- Oneshot";
     }
+    else if(which == homestuck_quotes) {
+        list_length = sizeof(homestuck_quotes);
+        from_name = ""; /* Built-in authors */
+    }
 
     /* Zero variables */
     INIT_VARIABLE(ret);
@@ -125,6 +129,12 @@ void new_message(struct discord *client, const struct discord_message *event) {
     /* Asking for a witty quote of a different source? */
     if(strcmp(event->content, "&ONESHOT") == 0) {
         quote_handler(client, event, oneshot_quotes, 0);
+        return; 
+    }
+
+    /* Asking for a homestuck quote? */
+    if(strcmp(event->content, "&HS") == 0) {
+        quote_handler(client, event, homestuck_quotes, 0);
         return; 
     }
 
