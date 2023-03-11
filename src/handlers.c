@@ -26,6 +26,7 @@ void quote_handler(struct discord *client, const struct discord_message *event,
     int selected_quote = 0;
     int list_length = 0;
     const char *quote = NULL;
+    char *from_name;
     char message[QUOTE_LENGTH_WITH_PS + 1];
     struct discord_ret_message ret;
     struct discord_create_message params;
@@ -36,17 +37,24 @@ void quote_handler(struct discord *client, const struct discord_message *event,
         return;
 
     /* Only send a quote every N messages, and only if the decrementor is enabled */
-    if(pancake_bot->message_cooldown != 0 && decrement == 1) {
-        pancake_bot->message_cooldown = ((pancake_bot->message_cooldown + 1) % MESSAGE_THRESHOLD);
-        return;
+    if(decrement == 1) { /* Are we counting UNIX and MEOW? */
+        pancake_bot->message_cooldown = pancake_bot->message_cooldown + 1; /* If so, increment the ticker. */
+        if(pancake_bot->message_cooldown != MESSAGE_THRESHOLD) { /* Have we ran over the counter? */
+                return; /* It's not time to send a message, so, leave now that the counter's been ticked. */
+        }
+        pancake_bot->message_cooldown = 0; /* If we're still here, zero the counter and send the message. */
     }
 
-    /* Compute the list of the quotes array by hand */
+    /* Compute the list of the quotes array by hand, and the "from" text */
     /* Weird way to permit the passing of an address and allowing sizeof to work */
-    if(which == unix_quotes)
-        list_length = sizeof(unix_quotes);
-    else if(which == oneshot_quotes)
-        list_length = sizeof(oneshot_quotes);
+    if(which == unix_quotes) {
+        list_length = sizeof(unix_quotes); 
+        from_name = "-- The UNIX-Haters Handbook";
+    }
+    else if(which == oneshot_quotes) {
+        list_length = sizeof(oneshot_quotes); 
+        from_name = "-- Oneshot";
+    }
 
     /* Zero variables */
     INIT_VARIABLE(ret);
@@ -57,7 +65,7 @@ void quote_handler(struct discord *client, const struct discord_message *event,
     params.message_reference = event->message_reference;
     selected_quote = rand() % list_length / sizeof(char *);
     quote = which[selected_quote];
-    written = libc99_snprintf(message, QUOTE_LENGTH_WITH_PS, "`%s`\n-- The UNIX Haters Handbook", quote);
+    written = snprintf(message, QUOTE_LENGTH_WITH_PS, "`%s`\n%s", quote, from_name);
 
     /* Make sure the written quote did not overflow */
     if(written >= QUOTE_LENGTH_WITH_PS) {
@@ -95,6 +103,7 @@ void new_message(struct discord *client, const struct discord_message *event) {
     log_info("[MSG] %s#%s on %llu/%llu, %llu: \"%s\"\n", event->author->username, event->author->discriminator, event->guild_id, event->channel_id, event->id, event->content);
 
     /* Do not trigger our own messages. */
+    /* Another check occurs in the message sender function body. */
     if(event->author->bot == 1)
         return;
 
@@ -102,56 +111,55 @@ void new_message(struct discord *client, const struct discord_message *event) {
     for(index = 0; event->content[index] != '\0'; index++) {
         if(islower(event->content[index]) == 0)
             continue;
-
         event->content[index] = toupper(event->content[index]);
     }
     
-    /* Meow? */
-    if(strstr(event->content, "MEOW") != NULL) {
-        quote_handler(client, event, oneshot_quotes, 1);
-
-        return;
-    }
-
-    /* Pancakes? */
-    if(strstr(event->content, "PANCAKES") != NULL) {
-        pancakes_handler(client, event);
-
-        return;
-    }
-
-    /* Hotcakes? */
-    if(strstr(event->content, "HOTCAKES") != NULL) {
-        pancakes_handler(client, event);
-
-        return;
-    }
-
-    /* UNIX? */
-    if(strstr(event->content, "UNIX") != NULL) {
-        quote_handler(client, event, unix_quotes, 1);
-
-        return;
-    }
-
+    /* ------------------------- start of commands --------------------------- */
     /* Asking for a witty quote? */
-    if(strstr(event->content, "&UNIX") != NULL) {
+    if(strcmp(event->content, "&UNIX") == 0) {
         quote_handler(client, event, unix_quotes, 0);
         return; 
     }
 
 
     /* Asking for a witty quote of a different source? */
-    if(strstr(event->content, "&ONESHOT") != NULL) {
+    if(strcmp(event->content, "&ONESHOT") == 0) {
         quote_handler(client, event, oneshot_quotes, 0);
         return; 
     }
 
     /* Need help? */
-    if(strstr(event->content, "&HELP") != NULL) {
+    if(strcmp(event->content, "&HELP") == 0) {
         help_handler(client, event);
         return;
     }
+    /* ------------------------- end of commands --------------------------- */
+    
+    /* ------------------------- start of idles --------------------------- */
+    /* Pancakes? */
+    if(strstr(event->content, "PANCAKES") != NULL) {
+        pancakes_handler(client, event);
+        return;
+    }
+
+    /* Hotcakes? */
+    if(strstr(event->content, "HOTCAKES") != NULL) {
+        pancakes_handler(client, event);
+        return;
+    }
+
+    /* UNIX? */
+    if(strstr(event->content, "UNIX") != NULL) {
+        quote_handler(client, event, unix_quotes, 1);
+        return;
+    }
+
+    /* Meow? */
+    if(strstr(event->content, "MEOW") != NULL) {
+        quote_handler(client, event, oneshot_quotes, 1);
+        return;
+    }
+    /* ------------------------- end of idles --------------------------- */
 }
 
 

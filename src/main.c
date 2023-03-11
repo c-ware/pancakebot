@@ -35,6 +35,7 @@ int main(void) {
     log_add_fp(fout, LOG_TRACE);
 
     /* Prime the bot */
+    pancake_bot.message_cooldown = 0;
     discord_set_data(client, &pancake_bot);
     pancake_bot.pancakes_emoji = load_emoji(client, 928763123362578552, 928817847487066144);
 
